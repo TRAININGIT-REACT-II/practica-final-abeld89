@@ -9,19 +9,19 @@ import Login from "./views/Login";
 import Home from "./views/Home";
 import Register from "./views/Register";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import UserContextProvider, { UserContext } from "./context/UserContextProvider";
+import UserContextProvider from "./context/UserContextProvider";
 import ViewNote from './views/ViewNote';
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Componente principal de la aplicación.
 const App = () => {
   return <section aria-labelledby="hook-counter" aria-describedby="hook-counter-desc">
-    <ErrorBoundary message="Algo ha salido mal">
-      <UserContextProvider>
-        <Router>
-          <Route path="/">
-            <Home />
-          </Route>
+    <UserContextProvider>
+      <Router>
+        <Route path="/">
+          <Home />
+        </Route>
+        <ErrorBoundary message="Algo ha salido mal">
           <Route path="/login">
             <Login />
           </Route>
@@ -34,15 +34,15 @@ const App = () => {
           <Route path="/addNote">
             <AddNote />
           </Route>
-          <Route path="/editNote">
+          <Route path="/editNote/:id">
             <EditNote />
           </Route>
           <Route path="/viewNote/:id">
             <ViewNote />
           </Route>
-        </Router>
-      </UserContextProvider>
-    </ErrorBoundary>
+        </ErrorBoundary>
+      </Router>
+    </UserContextProvider>
   </section >
 };
 

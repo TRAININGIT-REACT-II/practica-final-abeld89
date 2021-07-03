@@ -1,5 +1,5 @@
 import { useState, useContext } from "react"
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import '../css/Note.css';
 import { UserContext } from "../context/UserContextProvider";
 /**
@@ -12,6 +12,7 @@ const Note = () => {
   const { data } = useContext(UserContext);
 
   const [notes, setNotes] = useState([]);
+  const history = useHistory();
 
   const resetForm = () => {
     setTitle("");
@@ -45,8 +46,8 @@ const Note = () => {
         if (json.error) {
           alert(json.error);
         } else {
-          setNotes([json].concat(notes));
-
+          // setNotes([json].concat(notes));
+          history.push("/notes");
         }
         resetForm();
       })
@@ -81,7 +82,7 @@ const Note = () => {
             placeholder="Escribe el contenido"
           />
           <button type="submit" className="btn btn-primary col-md-12">Agregar una nota</button>
-          <button type="" className="btn btn-secondary col-md-12">Volver</button>
+          <button type="button" onClick={() => history.push("/notes")} className="btn btn-secondary col-md-12">Volver</button>
         </div>
       </form>
     </section>

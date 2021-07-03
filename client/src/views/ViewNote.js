@@ -1,53 +1,64 @@
-import { Redirect, useParams, Link, useRouteMatch } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react"
+import { Redirect, useParams, useHistory } from "react-router-dom";
 import { UserContext } from "../context/UserContextProvider";
 
 /**
  * Página para listar notas
  */
 const ViewNote = () => {
-  // Esta variable es para guardar la ruta padre de la que venimos (/notes)
-  const match = useRouteMatch();
-  const params = useParams();
   const { data } = useContext(UserContext);
-  const [note, setNote] = useState([]);
+  const { id } = useParams();
+  const [note, setNote] = useState(null);
+  const [error, setError] = useState(null);
+
+  const history = useHistory();
 
   if (!data.token) {
-    return <Redirect to="/login" />
+    return <Redirect to="/login" />;
   }
 
   const fetchNote = () => {
-    fetch(`/api/notes/${params.id}`, {
+    fetch("/api/notes/" + id, {
       headers: {
         "api-token": data.token
       }
     })
       .then((res) => res.json())
-      .then((json) => setNote(json))
-      .catch((err) => console.error(err));
+      .then((json) => {
+        setNote(json)
+      })
+      .catch((err) => setError(err));
   };
 
   useEffect(() => {
     fetchNote();
   }, []);
 
+  if (error) {
+    return <p>Ha ocurrido un error mientras se buscaba la nota</p>
+  }
+
+  if (!note) {
+    return <p>Cargando...</p>
+  }
+
   return (
     <section aria-label="Notes" className="d-flex justify-content-center">
       <div>
-        <div className="input-group mb-3">
-          <div className="input-group-prepend">
-            <span className="input-group-text" id="">Note {params.id}</span>
+        <div>
+          <p>Editar nota: {note.id}</p>
+          <div className="input-group mb-3">
+            <input disabled type="text" className="form-control" value={note.title} />
+            <input disabled type="text" className="form-control" value={note.content} />
           </div>
-          <input type="text" className="form-control" defaultValue={note.title} />
-          <input type="text" className="form-control" defaultValue={note.content} />
         </div>
-        <Link to={`${match.url}`}>
-          <button className="btn btn-outline-secondary" type="button">Volver</button>
-        </Link>
+        <div>
+          <button type="button" onClick={() => history.push("/notes")} className="btn-primary">Volver</button>
+        </div>
       </div>
-    </section >
-
+    </section>
   );
+
 };
 
 export default ViewNote;

@@ -33,9 +33,10 @@ const Modal = ({ children, show, onClose }) => {
     console.log("dentro if");
     return createPortal(
       <div role="dialog" aria-modal="true">
-        <div onClick={onClose} />
-        <div className="modal">
+        <div className="modal-background" onClick={onClose} />
+        <div className="my-modal">
           <button aria-label="Cerrar modal"
+            className="modal-close outline"
             onClick={onClose}>
             &times;
           </button>

@@ -1,4 +1,4 @@
-.modal {
+.my-modal {
   animation: slide-in .15s ease-in;
   background-color: var(--mini-color-element-background);
   border-radius: var(--mini-border-radius);

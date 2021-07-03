@@ -10,31 +10,30 @@ import Modal from "../components/Modal";
 const Notes = () => {
   const { data } = useContext(UserContext);
   const [notes, setNotes] = useState([]);
-
-  const [showModal, setShowModal] = useState(false);
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  
+  const [noteToDelete, setNoteToDelete] = useState("");
+  const closeModal = () => setNoteToDelete("");
 
   const handleClickNotDelete = () => {
-    setShowModal(false);
+    closeModal();
   }
 
-  const handleClickDelete = (id) => {
+  const handleClickDelete = () => {
     //Llamar a borrar
     console.log("boton eliminar");
-    deleteNote(id);
-    setShowModal(false);
+    deleteNote();
+    closeModal();
   }
 
-  const deleteNote = (id) => {
-    fetch(`/api/notes/${id}`, {
+  const deleteNote = () => {
+    fetch(`/api/notes/${noteToDelete}`, {
       headers: {
         "api-token": data.token
       },
       method: "DELETE"
     })
       .then((res) => res.json())
-      .then((json) => setNotes(json))
+      .then(() => fetchNotes())
       .catch((err) => console.error(err));
   };
 
@@ -68,26 +67,18 @@ const Notes = () => {
                 </div>
                 <input type="text" className="form-control" defaultValue={note.title} />
                 <input type="text" className="form-control" defaultValue={note.content} />
-                <Link to="/viewNote/" params={{ id: note.id }}>
+                <Link to={'/viewNote/' + note.id}>
                   <div className="input-group-append">
                     <button className="btn btn-outline-success" type="button">Ver</button>
                   </div>
                 </Link>
-                {/* <Link to={'/editNote/'+note.id }> */}
-                <Link to={{
-                  pathname: "/editNote/",
-                  state: {
-                    id: note.id,
-                    title: note.title,
-                    content: note.content
-                  }
-                }}>
+                <Link to={'/editNote/' + note.id} >
                   <div className="input-group-append">
                     <button className="btn btn-outline-secondary" type="button">Editar</button>
                   </div>
                 </Link>
                 <div className="input-group-append">
-                  <button onClick={openModal} className="btn btn-danger" type="button">Eliminar</button>
+                  <button onClick={() => setNoteToDelete(note.id)} className="btn btn-danger" type="button">Eliminar</button>
                 </div>
               </div>
             </div>
@@ -99,12 +90,13 @@ const Notes = () => {
           </Link>
         </div>
       </div>
-      <Modal show={showModal} onClose={closeModal}>
+      <Modal show={noteToDelete} onClose={closeModal}>
         <h3>¿Estás seguro que quieres eliminar esta nota?</h3>
         <p>Estamos en modal</p>
         <button onClick={handleClickDelete}>Si</button>
         <button onClick={handleClickNotDelete}>No</button>
       </Modal>
+      
     </section>
     );
   }
