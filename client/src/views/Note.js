@@ -21,9 +21,6 @@ const Note = () => {
 
   const submitNote = (e) => {
     e.preventDefault();
-    if (title && content) {
-      return;
-    }
     const submitNoteReq = {
       title: title,
       content: content
@@ -64,7 +61,7 @@ const Note = () => {
         <div className="form-group">
           <label htmlFor="add" className="text-center">Añadir una nueva nota</label>
           <input
-            id="add"
+            id="addTitle"
             type="text"
             className="form-control"
             value={title}
@@ -74,7 +71,7 @@ const Note = () => {
         </div>
         <div className="form-group">
           <input
-            id="add"
+            id="addContent"
             type="text"
             className="form-control"
             value={content}

@@ -272,7 +272,6 @@ fastify.route({
       });
     } else {
       // Actualizamos
-      console.log(request.body, title, content);
       db.get("notes")
         .find({ author: userId, id })
         .assign({ title, content })

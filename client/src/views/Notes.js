@@ -20,7 +20,6 @@ const Notes = () => {
 
   const handleClickDelete = () => {
     //Llamar a borrar
-    console.log("boton eliminar");
     deleteNote();
     closeModal();
   }

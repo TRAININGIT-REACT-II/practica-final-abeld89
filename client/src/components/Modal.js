@@ -28,9 +28,7 @@ const Modal = ({ children, show, onClose }) => {
   }, [show]);
 
   // Renderizamos componente
-  console.log("dentro del modal valor: " + show + modalRef.current);
   if (show && modalRef.current != null) {
-    console.log("dentro if");
     return createPortal(
       <div role="dialog" aria-modal="true">
         <div className="modal-background" onClick={onClose} />
